@@ -1,5 +1,6 @@
 import './App.css';
-import React, { useState } from 'react'
+import React from 'react';
+import alarm from './Bleep.mp3';
 
 function App() {
 
@@ -8,7 +9,7 @@ function App() {
   const [sessionTime, setSessionTime] = React.useState(25 * 60);
   const [timeOn, setTimeOn] = React.useState(false);
   const [onBreak, setOnBreak] = React.useState(false);
-  const [breakAudio, setBreakAudio] = React.useState(new Audio("./Bleep.mp3"));
+  const [breakAudio, setBreakAudio] = React.useState(new Audio(alarm));
 
   const playBreakSound = () => {
     breakAudio.currentTime = 0;
@@ -24,20 +25,20 @@ function App() {
   };
 
   const changeTime = (amount, type) => {
-    if(type == "break") {
-      if(breakTime <= 60 && amount < 0) {
+    if (type == "break") {
+      if (breakTime <= 60 && amount < 0) {
         return;
-      }
+      };
       setBreakTime((prev) => prev + amount);
     } else {
-      if(breakTime <= 60 && amount < 0) {
+      if (sessionTime <= 60 && amount < 0) {
         return;
-      }
+      };
       setSessionTime((prev) => prev + amount);
       if(!timeOn){
         setDisplayTime(sessionTime + amount);
-      }
-    }
+      };
+    };
   };
 
   const controlTime = () => {
@@ -45,20 +46,23 @@ function App() {
     let date = new Date().getTime();
     let nextDate = new Date().getTime() + second;
     let onBreakVar = onBreak;
+
     if(!timeOn) {
       let interval = setInterval(() => {
         date = new Date().getTime();
-        if(date > nextDate){
+        if(date > nextDate) {
           setDisplayTime((prev) => {
-            if(prev <= 0 && !onBreakVar){
-              playBreakSound();
+            if(prev <= 0 && !onBreakVar){ 
               onBreakVar = true;
               setOnBreak(true);
-              return breakTime;
-            }else if(prev <= 0 && onBreakVar){
               playBreakSound();
+
+              return breakTime;
+            } else if (prev <= 0 && onBreakVar){          
               onBreakVar = false;
               setOnBreak(false);
+              playBreakSound();
+
               return sessionTime;
             }
             return prev - 1;
@@ -76,8 +80,8 @@ function App() {
   };
 
   const resetTime = () => {
-    setBreakTime(5 * 60)
     setDisplayTime(25 * 60)
+    setBreakTime(5 * 60)
     setSessionTime(25 * 60)
   };
 
@@ -116,7 +120,10 @@ function App() {
   );
 }
 
+
+
 function Length({title, changeTime, type, time, formatTime}){
+
   return (
 <div>
     <h4>{title}</h4>

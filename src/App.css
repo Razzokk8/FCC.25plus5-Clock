@@ -12,3 +12,21 @@
     justify-items: center;
     align-items: center;
 }
+h1 {
+    margin-top: 0px !important;
+}
+#break-length, #session-length {
+    background-color: black;
+    border-radius: 5px;
+    padding:4px;
+}
+.medium {
+    color: #ad1457;
+    margin-top: 3rem;
+}
+.sha, #time-left {
+    filter: drop-shadow(.1em .0em .2rem rgb(0, 0, 0));
+}
+#reset, #start_stop {
+    margin: 8px;
+}

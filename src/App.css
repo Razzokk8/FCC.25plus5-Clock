@@ -24,7 +24,7 @@ h1 {
     color: #ad1457;
     margin-top: 3rem;
 }
-.sha, #time-left {
+.sha, #time-left, h2 {
     filter: drop-shadow(.1em .0em .2rem rgb(0, 0, 0));
 }
 #reset, #start_stop {

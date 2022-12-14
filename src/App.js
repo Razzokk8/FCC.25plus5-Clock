@@ -3,11 +3,11 @@ import React from "react";
 import alarm from "./Bleep.mp3";
 
 function App() {
-  const [displayTime, setDisplayTime] = React.useState(25 * 60);
+  const [displayTime, setDisplayTime] = React.useState(1 * 60);
   const [breakTime, setBreakTime] = React.useState(5 * 60);
-  const [sessionTime, setSessionTime] = React.useState(25 * 60);
+  const [sessionTime, setSessionTime] = React.useState(1 * 60);
   const [timeOn, setTimeOn] = React.useState(false);
-  const [onBreak, setOnBreak] = React.useState(false);
+  const [isOnBreak, setOnBreak] = React.useState(false);
   const [breakAudio, setBreakAudio] = React.useState(new Audio(alarm));
 
   const playBreakSound = () => {
@@ -33,11 +33,10 @@ function App() {
       setBreakTime((prev) => prev + amount);
     } else {
       if (sessionTime <= 60 && amount < 0) {
-        console.log('not doing anything' + sessionTime)
         setSessionTime(1500);
         return;
       }
-      console.log('not doing anything' + sessionTime)
+
       setSessionTime((prev) => prev + amount);
       if (!timeOn) {
         setDisplayTime(sessionTime + amount);
@@ -45,35 +44,31 @@ function App() {
     }
   };
 
+  let isOnBreakLocal = false;
   const controlTime = () => {
-    let second = 1000;
-    let date = new Date().getTime();
-    let nextDate = new Date().getTime() + second;
-    let onBreakVar = onBreak;
+    let oneSecond = 1000;
+    let currentTimeInSeconds = new Date().getTime();
+    let nextDate = new Date().getTime() + oneSecond;
+    let prevDisplayTime = displayTime;
 
     if (!timeOn) {
       let interval = setInterval(() => {
-        date = new Date().getTime();
-        if (date > nextDate) {
-          setDisplayTime((prev) => {
-            if (prev <= 0 && !onBreakVar) {
-              onBreakVar = true;
-              setOnBreak(true);
-              playBreakSound();
-
-              return breakTime;
-            } else if (prev <= 0 && onBreakVar) {
-              onBreakVar = false;
-              setOnBreak(false);
-              playBreakSound();
-
-              return sessionTime;
-            }
-            return prev - 1;
-          });
-          nextDate += second;
+        if (prevDisplayTime <= 0 && !isOnBreakLocal) {
+          setOnBreak(true);
+          isOnBreakLocal = true;
+          playBreakSound();
+          setDisplayTime(breakTime);
+          prevDisplayTime = breakTime;
+        } else if (prevDisplayTime <= 0 && isOnBreakLocal) {
+          setOnBreak(false);
+          isOnBreakLocal = false;
+          playBreakSound();
+          setDisplayTime(sessionTime);
+          prevDisplayTime = sessionTime;
+        } else {
+          setDisplayTime(--prevDisplayTime);
         }
-      }, 30);
+      }, 1000);
       localStorage.clear();
       localStorage.setItem("interval-id", interval);
     }
@@ -83,7 +78,7 @@ function App() {
     setTimeOn(!timeOn);
   };
 
-  const resetTime = () => {
+  const resetTime = (time) => {
     setDisplayTime(25 * 60);
     setBreakTime(5 * 60);
     setSessionTime(25 * 60);
@@ -93,7 +88,7 @@ function App() {
     <div className="App center-align">
       <div>
         <i className="medium material-icons sha">access_time</i>
-        <h1>25 + 5 Clock</h1>
+        <h2>25 + 5 Clock</h2>
       </div>
       <div className="dual-container">
         <Length
@@ -119,7 +114,7 @@ function App() {
           formatId={"session-length"}
         />
       </div>
-      <h4 id="timer-label">{onBreak ? "Break" : "Session"}</h4>
+      <h4 id="timer-label">{isOnBreak ? "Break" : "Session"}</h4>
       <h2 id="time-left">{formatTime(displayTime)}</h2>
       <button
         id="start_stop"
@@ -154,10 +149,9 @@ function Length({
   btnIdUp,
   formatId,
 }) {
-  console.log(formatTime(time));
   return (
-    <div id={id}>
-      <h4>{title}</h4>
+    <div>
+      <h4 id={id}>{title}</h4>
       <div className="time-sets">
         <button
           id={btnIdDown}
@@ -166,7 +160,7 @@ function Length({
         >
           <i className="material-icons">arrow_downward</i>
         </button>
-        <h4 id={formatId}>{formatTime(time)}</h4>
+        <h4 id={formatId}>{time / 60}</h4>
         <button
           id={btnIdUp}
           className="btn-small pink darken-3 sha"

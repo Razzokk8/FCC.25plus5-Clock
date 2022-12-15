@@ -3,9 +3,9 @@ import React from "react";
 import alarm from "./Bleep.mp3";
 
 function App() {
-  const [displayTime, setDisplayTime] = React.useState(1 * 60);
+  const [displayTime, setDisplayTime] = React.useState(25 * 60);
   const [breakTime, setBreakTime] = React.useState(5 * 60);
-  const [sessionTime, setSessionTime] = React.useState(1 * 60);
+  const [sessionTime, setSessionTime] = React.useState(25 * 60);
   const [timeOn, setTimeOn] = React.useState(false);
   const [isOnBreak, setOnBreak] = React.useState(false);
   const [breakAudio, setBreakAudio] = React.useState(new Audio(alarm));
@@ -87,10 +87,10 @@ function App() {
   return (
     <div className="App center-align">
       <div>
+        <h3>25 + 5 Clock</h3>
         <i className="medium material-icons sha">access_time</i>
-        <h2>25 + 5 Clock</h2>
       </div>
-      <div className="dual-container">
+      <div className="dual-container row">
         <Length
           id={"break-label"}
           title={"Break length"}
@@ -115,7 +115,15 @@ function App() {
         />
       </div>
       <h4 id="timer-label">{isOnBreak ? "Break" : "Session"}</h4>
-      <h2 id="time-left">{formatTime(displayTime)}</h2>
+      <h2 
+        className="black"
+        id="time-left"
+        style={{
+          color: displayTime <= 59 ? "#ad1457" : null,
+        }}
+      >
+        {formatTime(displayTime)}
+      </h2>
       <button
         id="start_stop"
         onClick={controlTime}
@@ -134,6 +142,11 @@ function App() {
       >
         <i className="material-icons">autorenew</i>
       </button>
+      <div className="col s12 footer">
+        © &nbsp;
+        <span>{new Date().getFullYear()}</span>
+        &nbsp; Riccardo Limiti
+      </div>
     </div>
   );
 }
@@ -150,7 +163,7 @@ function Length({
   formatId,
 }) {
   return (
-    <div>
+    <div className="component-container">
       <h4 id={id}>{title}</h4>
       <div className="time-sets">
         <button
@@ -160,7 +173,7 @@ function Length({
         >
           <i className="material-icons">arrow_downward</i>
         </button>
-        <h4 id={formatId}>{time / 60}</h4>
+        <h4 id={formatId}>{time / 60} min.</h4>
         <button
           id={btnIdUp}
           className="btn-small pink darken-3 sha"

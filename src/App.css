@@ -52,3 +52,14 @@ h4 {
   width: 174px;
   padding: 4px;
 }
+/* responsive layout media queries */
+@media (max-width: 767.98px) {
+  .dual-container {
+    max-width: 280px;
+    flex-direction: column;
+  }
+  h2 {
+    font-size: 3rem;
+    margin: 1rem;
+  }
+}

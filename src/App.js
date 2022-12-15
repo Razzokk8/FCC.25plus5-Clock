@@ -85,10 +85,10 @@ function App() {
   };
 
   return (
-    <div className="App center-align">
+    <div className="App center-align container">
       <div>
         <h3>25 + 5 Clock</h3>
-        <i className="medium material-icons sha">access_time</i>
+        <h2>🍅</h2>
       </div>
       <div className="dual-container row">
         <Length
@@ -119,7 +119,7 @@ function App() {
         className="black"
         id="time-left"
         style={{
-          color: displayTime <= 59 ? "#ad1457" : null,
+          color: displayTime <= 59 ? "red" : null,
         }}
       >
         {formatTime(displayTime)}
@@ -127,7 +127,7 @@ function App() {
       <button
         id="start_stop"
         onClick={controlTime}
-        className="btn-large pink darken-3 sha"
+        className="btn-large pink darken-3 sha waves-effect waves-light"
       >
         {timeOn ? (
           <i className="material-icons">pause_circle_filled</i>
@@ -138,7 +138,7 @@ function App() {
       <button
         id="reset"
         onClick={resetTime}
-        className="btn-large pink darken-3 sha"
+        className="btn-large pink darken-3 sha waves-effect waves-light"
       >
         <i className="material-icons">autorenew</i>
       </button>
@@ -168,7 +168,7 @@ function Length({
       <div className="time-sets">
         <button
           id={btnIdDown}
-          className="btn-small pink darken-3 sha"
+          className="btn-small pink darken-3 sha waves-effect waves-light"
           onClick={() => changeTime(-60, type)}
         >
           <i className="material-icons">arrow_downward</i>
@@ -176,7 +176,7 @@ function Length({
         <h4 id={formatId}>{time / 60} min.</h4>
         <button
           id={btnIdUp}
-          className="btn-small pink darken-3 sha"
+          className="btn-small pink darken-3 sha waves-effect waves-light"
           onClick={() => changeTime(60, type)}
         >
           <i className="material-icons">arrow_upward</i>
